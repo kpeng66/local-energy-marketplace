@@ -43,7 +43,7 @@ export const StoreModal = () => {
             
             const response = await axios.post('/api/stores', values);
 
-            toast.success("Store created.");
+            window.location.assign(`/${response.data.id}`);
         } catch (error) {
             toast.error("Something went wrong.");
         } finally {
@@ -73,7 +73,7 @@ export const StoreModal = () => {
                                     <FormControl>
                                         <Input 
                                             disabled={loading} 
-                                            placeholder="E-Commerce" 
+                                            placeholder="Marketplace" 
                                             {...field} />
                                     </FormControl>
                                     <FormMessage />
