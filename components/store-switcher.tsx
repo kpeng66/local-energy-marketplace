@@ -54,7 +54,7 @@ export default function StoreSwitcher({
                 >
                     
                     <StoreIcon className="mr-2 h-4 w-4"/>
-                    Current Store
+                    {currentStore?.label}
                     <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
