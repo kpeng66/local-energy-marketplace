@@ -2,15 +2,15 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-import { SettingsForm } from "./components/settings-form";
+import { GenerationDash } from "./components/generation-dash";
 
-interface SettingsPageProps {
+interface GenerationPageProps {
     params: {
         storeId: string
     }
 };
 
-const SettingsPage: React.FC<SettingsPageProps> = async ({
+const GenerationPage: React.FC<GenerationPageProps> = async ({
     params
 }) => {
     const { userId } = auth();
@@ -33,10 +33,10 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({
     return (
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">
-                <SettingsForm initialData={store} />
+                <GenerationDash initialData={store} />
             </div>
         </div>
     );
 }
 
-export default SettingsPage;
+export default GenerationPage;

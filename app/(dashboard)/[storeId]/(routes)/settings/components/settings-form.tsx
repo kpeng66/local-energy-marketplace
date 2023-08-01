@@ -24,6 +24,14 @@ interface SettingsFormProps {
 
 const formSchema = z.object({
     name: z.string().min(1),
+    lat: z.number().min(-90).max(90),
+    lon: z.number().min(-180).max(180),
+    system_capacity: z.number().min(0.05).max(500000),
+    module_type: z.number().min(0).max(2),
+    losses: z.number().min(-5).max(99),
+    array_type: z.number().min(0).max(4),
+    tilt: z.number().min(0).max(90),
+    azimuth: z.number().min(0).max(360),
 });
 
 type SettingsFormValues = z.infer<typeof formSchema>;
@@ -104,10 +112,130 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 render={({ field }) => (
                     <FormItem>
                         <FormLabel>
-                            Name
+                            Store Name
                         </FormLabel>
                         <FormControl>
                             <Input disabled={loading} placeholder="Store name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField 
+                control={form.control}
+                name="lat"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Latitude
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={loading} placeholder="0" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                 <FormField 
+                control={form.control}
+                name="lon"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Longitude
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={loading} placeholder="0" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField 
+                control={form.control}
+                name="system_capacity"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            System Capacity
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={loading} placeholder="0" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField 
+                control={form.control}
+                name="module_type"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Module Type
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={loading} placeholder="0" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField 
+                control={form.control}
+                name="losses"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Losses
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={loading} placeholder="0" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField 
+                control={form.control}
+                name="array_type"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Array Type
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={loading} placeholder="0" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField 
+                control={form.control}
+                name="tilt"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Tilt
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={loading} placeholder="0" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField 
+                control={form.control}
+                name="azimuth"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Azimuth
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={loading} placeholder="0" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
