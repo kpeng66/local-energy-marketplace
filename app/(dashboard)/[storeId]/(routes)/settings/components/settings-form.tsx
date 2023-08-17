@@ -24,14 +24,14 @@ interface SettingsFormProps {
 
 const formSchema = z.object({
     name: z.string().min(1),
-    lat: z.number().min(-90).max(90),
-    lon: z.number().min(-180).max(180),
-    system_capacity: z.number().min(0.05).max(500000),
-    module_type: z.number().min(0).max(2),
-    losses: z.number().min(-5).max(99),
-    array_type: z.number().min(0).max(4),
-    tilt: z.number().min(0).max(90),
-    azimuth: z.number().min(0).max(360),
+    latitude: z.string().min(1),
+    longitude: z.string().min(1),
+    systemCapacity: z.string().min(1),
+    module_type: z.z.string().min(1),
+    losses: z.string().min(1),
+    array_type: z.z.string().min(1),
+    tilt: z.string().min(1),
+    azimuth: z.string().min(1),
 });
 
 type SettingsFormValues = z.infer<typeof formSchema>;
@@ -123,14 +123,14 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 />
                 <FormField 
                 control={form.control}
-                name="lat"
+                name="latitude"
                 render={({ field }) => (
                     <FormItem>
                         <FormLabel>
                             Latitude
                         </FormLabel>
                         <FormControl>
-                            <Input disabled={loading} placeholder="0" />
+                            <Input disabled={loading} placeholder="0" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -138,14 +138,14 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 />
                  <FormField 
                 control={form.control}
-                name="lon"
+                name="longitude"
                 render={({ field }) => (
                     <FormItem>
                         <FormLabel>
                             Longitude
                         </FormLabel>
                         <FormControl>
-                            <Input disabled={loading} placeholder="0" />
+                            <Input disabled={loading} placeholder="0" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -153,14 +153,14 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 />
                 <FormField 
                 control={form.control}
-                name="system_capacity"
+                name="systemCapacity"
                 render={({ field }) => (
                     <FormItem>
                         <FormLabel>
                             System Capacity
                         </FormLabel>
                         <FormControl>
-                            <Input disabled={loading} placeholder="0" />
+                            <Input disabled={loading} placeholder="0" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -175,7 +175,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             Module Type
                         </FormLabel>
                         <FormControl>
-                            <Input disabled={loading} placeholder="0" />
+                            <Input disabled={loading} placeholder="0" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -190,7 +190,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             Losses
                         </FormLabel>
                         <FormControl>
-                            <Input disabled={loading} placeholder="0" />
+                            <Input disabled={loading} placeholder="0" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -205,7 +205,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             Array Type
                         </FormLabel>
                         <FormControl>
-                            <Input disabled={loading} placeholder="0" />
+                            <Input disabled={loading} placeholder="0" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -220,7 +220,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             Tilt
                         </FormLabel>
                         <FormControl>
-                            <Input disabled={loading} placeholder="0" />
+                            <Input disabled={loading} placeholder="0" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -235,7 +235,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                             Azimuth
                         </FormLabel>
                         <FormControl>
-                            <Input disabled={loading} placeholder="0" />
+                            <Input disabled={loading} placeholder="0" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
