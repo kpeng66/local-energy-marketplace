@@ -8,16 +8,17 @@ Chart.register(LinearScale, LineController, PointElement, LineElement, CategoryS
 
 
 import { GET } from "../../../../api/solar/route";
+import CurrentMonthDisplay from '@/components/current-month-display';
 
 const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) => {
     const [monthlyOutput, setMonthlyOutput] = useState<string | null>(null);
     const [store, setStore] = useState(null);
+    const [solarCredits, setSolarCredits] = useState<string>("");
 
     useEffect(() => {
         const fetchSolarOutput = async () => {
 
         const response = await fetch(`/api/stores/${params.storeId}`);
-        console.log(response)
         const store = await response.json();
 
         setStore(store);
@@ -27,6 +28,8 @@ const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) =
                 <div>Store not found!</div>
             )
         }
+
+        setSolarCredits(store.solar_credits);
 
         const inputData = {
             lat: store?.latitude,  
@@ -98,14 +101,29 @@ const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) =
             }
         }
     } as any;
+
+    console.log(solarCredits);
     
     return (
-        <div className="flex-col">
-            <div className="flex-1 space-y-4 p-8 pt-6">
-            {monthlyOutput && (
-                    <Line data={data} options={options} />
+        <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background text-foreground shadow-md">
+            
+            <div className="flex-1 space-y-4 p-8 pt-6 w-full max-w-2xl">
+                
+                <div className="text-center py-4 px-6 bg-card rounded-lg shadow-sm">
+                    <h3>
+                        Current month: <CurrentMonthDisplay />
+                        Solar credits available for sale: {Math.floor(parseFloat(solarCredits))}
+                    </h3>
+                </div>
+    
+                {monthlyOutput && (
+                    <div className="p-4 bg-card rounded-lg shadow-sm">
+                        <Line data={data} options={options} />
+                    </div>
                 )}
+                
             </div>
+            
         </div>
     );
 };

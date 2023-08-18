@@ -18,6 +18,7 @@ export async function PATCH(
             colorId,
             sizeId,
             images,
+            credits,
             isFeatured,
             isArchived
         } = body;
@@ -76,6 +77,7 @@ export async function PATCH(
                 categoryId,
                 colorId,
                 sizeId,
+                credits,
                 images: {
                     deleteMany: {}
                 },
@@ -128,10 +130,23 @@ export async function DELETE(
                 userId
             }
         }
-        )
+        );
 
         if (!storeByUserId) {
             return new NextResponse("Unauthoried", { status: 403 });
+        }
+
+        const productToDelete = await prismadb.product.findUnique({
+            where: {
+                id: params.productId
+            },
+            select: {
+                credits: true
+            }
+        });
+
+        if (!productToDelete) {
+            return new NextResponse("Product not found", { status: 404 });
         }
 
         const product = await prismadb.product.deleteMany({
@@ -139,6 +154,17 @@ export async function DELETE(
                 id: params.productId,
             }
         });
+
+        if (product) {
+            await prismadb.store.update({
+                where: {
+                    id: storeByUserId.id
+                },
+                data: {
+                    solar_credits: storeByUserId.solar_credits + productToDelete.credits
+                }
+            });
+        }
 
         return NextResponse.json(product);
 

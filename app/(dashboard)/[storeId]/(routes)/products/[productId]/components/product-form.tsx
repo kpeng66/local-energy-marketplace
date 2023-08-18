@@ -8,7 +8,7 @@ import { Trash } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,7 @@ const formSchema = z.object({
     categoryId: z.string().min(1),
     colorId: z.string().min(1),
     sizeId: z.string().min(1),
+    credits: z.string().min(1),
     isFeatured: z.boolean().default(false).optional(),
     isArchived: z.boolean().default(false).optional(),
 });
@@ -58,8 +59,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     const toastMessage = initialData ? "Product updated": "Product created";
     const action = initialData ? "Save changes": "Create";
 
-
-
     const form = useForm<ProductFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData ? {
@@ -72,12 +71,40 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             categoryId: '',
             colorId: '',
             sizeId: '',
+            credits: '',
             isFeatured: false,
             isArchived: false,    
         }
     });
 
+    const [storeCredits, setStoreCredits] = useState<number>(0);
+
+    useEffect(() => {
+        async function fetchCredits() {
+            try {
+                const response = await fetch(`/api/stores/${params.storeId}`);
+                const store = await response.json();
+                if (!store) {
+                    return (
+                        <div>Store not found!</div>
+                    )
+                }
+                setStoreCredits(store.solar_credits);
+            } catch (error) {
+                console.error('Failed to fetch store credits:', error);
+            }
+        }
+        
+        fetchCredits();
+    }, [params.storeId]);
+
     const onSubmit = async (data: ProductFormValues) => {
+        
+        if (parseInt(data.credits) > storeCredits) {
+            toast.error("Product credits cannot exceed store credits.");
+            return;
+        }
+        
         try {
             setLoading(true);
             if (initialData) {
@@ -189,6 +216,21 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     </FormItem>
                 )}
                 />
+                <FormField 
+                control={form.control}
+                name="credits"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Credits
+                        </FormLabel>
+                        <FormControl>
+                            <Input type="number" disabled={loading} placeholder="0" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+                />
                  <FormField 
                 control={form.control}
                 name="categoryId"
@@ -257,6 +299,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     </FormItem>
                 )}
                 />
+                 
                 <FormField 
                 control={form.control}
                 name="colorId"

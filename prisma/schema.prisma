@@ -23,7 +23,7 @@ model Store {
   array_type String
   module_type String
   losses String
-  solar_credits String
+  solar_credits String @default("0")
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[] @relation("StoreToCategory")
   sizes    Size[] @relation("StoreToSize")
@@ -99,6 +99,7 @@ model Product {
   isFeatured Boolean @default(false)
   isArchived Boolean @default(false)
   sizeId String
+  credits String @default("0")
   size Size @relation(fields: [sizeId], references: [id])
   colorId String
   color Color @relation(fields: [colorId], references: [id])
@@ -111,7 +112,6 @@ model Product {
   @@index([colorId])
   @@index([categoryId])
   @@index([sizeId])
-
 
 }
 

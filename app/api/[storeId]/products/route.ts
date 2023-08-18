@@ -16,6 +16,7 @@ export async function POST(
             categoryId,
             colorId,
             sizeId,
+            credits,
             images,
             isFeatured,
             isArchived
@@ -65,6 +66,16 @@ export async function POST(
             return new NextResponse("Unauthoried", { status: 403 });
         }
 
+        const updatedStore = await prismadb.store.update({
+            where: {
+                id: storeByUserId.id,
+            },
+            data: {
+                solar_credits: (parseFloat(storeByUserId.solar_credits) - credits).toString(),
+            }
+
+        })
+
         const product = await prismadb.product.create({
             data: {
                 name,
@@ -74,6 +85,7 @@ export async function POST(
                 categoryId,
                 sizeId,
                 colorId,
+                credits,
                 storeId: params.storeId,
                 images: {
                     createMany: {
@@ -102,6 +114,7 @@ export async function GET(
         const categoryId = searchParams.get("categoryId") || undefined;
         const colorId = searchParams.get("colorId") || undefined;
         const sizeId = searchParams.get("sizeId") || undefined;
+        const credits = searchParams.get("credits") || undefined;
         const isFeatured = searchParams.get("isFeatured");
 
         if (!params.storeId) {
@@ -114,6 +127,7 @@ export async function GET(
                 categoryId,
                 colorId,
                 sizeId,
+                credits,
                 isFeatured: isFeatured ? true : undefined,
                 isArchived: false
             },
