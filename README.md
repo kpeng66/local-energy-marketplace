@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-This project is the admin dashboard for the Local Energy E-commerce platform, where stores with distributed generation (i.e. solar) can bundle their products with renewable energy credits to sell to consumers needing to reduce their carbon footprint. I built this project using Next.js, Tailwind CSS, TypeScript, Prisma (MySQL), and shadcn/ui. 
+This project is the admin dashboard for the Local Energy E-commerce platform, where stores with distributed generation (i.e. solar) can bundle their products with renewable energy credits to sell to consumers needing to reduce their carbon footprint. I built this project using Next.js, React, Tailwind CSS, TypeScript, Prisma (MySQL), and shadcn/ui. 
 
 ## Getting Started
 
