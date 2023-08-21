@@ -6,9 +6,8 @@ import { Chart, LinearScale, LineController, PointElement, LineElement, Category
 
 Chart.register(LinearScale, LineController, PointElement, LineElement, CategoryScale, Tooltip, Title);
 
-
-import { GET } from "../../../../api/solar/route";
 import CurrentMonthDisplay from '@/components/current-month-display';
+import { getSolarOutput } from '@/lib/utils';
 
 const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) => {
     const [monthlyOutput, setMonthlyOutput] = useState<string | null>(null);
@@ -22,12 +21,6 @@ const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) =
         const store = await response.json();
 
         setStore(store);
-
-        if (!store) {
-            return (
-                <div>Store not found!</div>
-            )
-        }
 
         setSolarCredits(store.solar_credits);
 
@@ -43,7 +36,7 @@ const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) =
           };
 
         try {
-            const data = await GET(inputData);
+            const data = await getSolarOutput(inputData);
             setMonthlyOutput(data.outputs.ac_monthly);
         } catch (error) {
             console.error('Failed to fetch data:');
@@ -104,28 +97,38 @@ const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) =
 
     console.log(solarCredits);
     
+    if (!store) {
+        return (
+            <div>Store not found!</div>
+        )
+    }
+    
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background text-foreground shadow-md">
-            
-            <div className="flex-1 space-y-4 p-8 pt-6 w-full max-w-2xl">
+        
+        <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background text-foreground">
+            <div className="flex-1 p-8 w-full max-w-2xl space-y-6">
                 
-                <div className="text-center py-4 px-6 bg-card rounded-lg shadow-sm">
-                    <h3>
-                        Current month: <CurrentMonthDisplay />
-                        Solar credits available for sale: {Math.floor(parseFloat(solarCredits))}
-                    </h3>
+                <div className="text-center p-6 bg-card rounded-lg shadow-md">
+                    <h3 className="text-2xl font-semibold mb-2">Current month:</h3>
+                    <p className="text-xl mb-2"><CurrentMonthDisplay /></p>
+                    <p className="text-xl">
+                        Solar credits available for sale: 
+                        <span className="font-semibold"> {Math.floor(parseFloat(solarCredits))}</span>
+                    </p>
                 </div>
     
                 {monthlyOutput && (
-                    <div className="p-4 bg-card rounded-lg shadow-sm">
-                        <Line data={data} options={options} />
+                    <div className="bg-card rounded-lg shadow-md">
+                        <div className="p-4">
+                            <Line data={data} options={options} />
+                        </div>
                     </div>
                 )}
                 
             </div>
-            
         </div>
     );
+    
 };
 
 export default GenerationPage;

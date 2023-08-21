@@ -1,7 +1,6 @@
 import prismadb from "@/lib/prismadb";
-import { isLastDayOfMonth } from "@/lib/utils";
+import { getSolarOutput, isLastDayOfMonth } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
-import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -10,10 +9,6 @@ export async function PATCH(
     ) {
       try {
         const { userId } = auth();
-
-        //if (!userId) {
-            //return new NextResponse("Unauthenticated", { status: 401});
-       // }
 
         if (!params.storeId) {
             return new NextResponse("Store id is required", { status: 400 });
@@ -40,23 +35,11 @@ export async function PATCH(
             losses: store?.losses  
           };
 
-        const response = await axios.get('https://developer.nrel.gov/api/pvwatts/v8.json', {
-        params: {
-          'api_key': process.env.NEXT_PUBLIC_PVWATTS_API_KEY,
-          'lat': parseFloat(data.lat),
-          'lon': parseFloat(data.lon),
-          'system_capacity': parseFloat(data.system_capacity),
-          'azimuth': parseFloat(data.azimuth),
-          'tilt': parseFloat(data.tilt),
-          'array_type': parseInt(data.array_type),
-          'module_type': parseInt(data.module_type),
-          'losses': parseFloat(data.losses),
-          'timeframe': 'hourly'
-        }
-      });
+        const outputData = await getSolarOutput(data);
+        //console.log(outputData);
 
-      if (isLastDayOfMonth()) {
-        const kwhData = response.data.outputs.ac_monthly; 
+      if (true) {
+        const kwhData = outputData.outputs.ac_monthly; 
         const currentMonthIndex = new Date().getMonth();
         const thisMonthKwh = kwhData[currentMonthIndex];
 

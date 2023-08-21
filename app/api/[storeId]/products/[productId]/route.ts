@@ -161,7 +161,7 @@ export async function DELETE(
                     id: storeByUserId.id
                 },
                 data: {
-                    solar_credits: storeByUserId.solar_credits + productToDelete.credits
+                    solar_credits: (parseFloat(storeByUserId.solar_credits) + parseFloat(productToDelete.credits)).toString()
                 }
             });
         }
