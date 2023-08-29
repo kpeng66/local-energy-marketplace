@@ -8,6 +8,8 @@ Chart.register(LinearScale, LineController, PointElement, LineElement, CategoryS
 
 import CurrentMonthDisplay from '@/components/current-month-display';
 import { getSolarOutput } from '@/lib/utils';
+import { Heading } from '@/components/ui/heading';
+import { Button } from '@/components/ui/button';
 
 const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) => {
     const [monthlyOutput, setMonthlyOutput] = useState<string | null>(null);
@@ -104,27 +106,35 @@ const GenerationPage: React.FC<{ params: { storeId: string } }> = ({ params }) =
     }
     
     return (
-        
-        <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background text-foreground">
-            <div className="flex-1 p-8 w-full max-w-2xl space-y-6">
-                
-                <div className="text-center p-6 bg-card rounded-lg shadow-md">
-                    <h3 className="text-2xl font-semibold mb-2">Current month:</h3>
-                    <p className="text-xl mb-2"><CurrentMonthDisplay /></p>
-                    <p className="text-xl">
-                        Solar credits available for sale: 
-                        <span className="font-semibold"> {Math.floor(parseFloat(solarCredits))}</span>
-                    </p>
+        <div className="flex-col">
+            <div className="flex-1 space-y-4 p-4 sm:p-6 lg:p-8 pt-6">
+                <div className="flex flex-col sm:flex-row items-center justify-between">
+                    <Heading 
+                    title="Solar Energy Generation"
+                    description="View your solar system's generation data"
+                    />
                 </div>
     
-                {monthlyOutput && (
-                    <div className="bg-card rounded-lg shadow-md">
-                        <div className="p-4">
-                            <Line data={data} options={options} />
+                <div className="flex flex-col items-center justify-center min-h-screen p-2 sm:p-4 lg:p-8 bg-background text-foreground transition-all duration-300">
+                    <div className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-2xl space-y-6 bg-card rounded-xl shadow-2xl border border-primary transition-all duration-300">
+                        <div className="text-center p-4 sm:p-6 lg:p-8 bg-popover rounded-lg shadow-md transition-all duration-300">
+                            <h3 className="text-xl sm:text-2xl mb-2 text-secondary-foreground opacity-75">Current month:</h3>
+                            <p className="text-lg sm:text-xl mb-2 text-secondary-foreground"><CurrentMonthDisplay /></p>
+                            <p className="text-lg sm:text-xl">
+                                Solar credits available for sale: 
+                                <span className="font-semibold text-accent-foreground"> {Math.floor(parseFloat(solarCredits))}</span>
+                            </p>
                         </div>
+        
+                        {monthlyOutput && (
+                            <div className="bg-card rounded-lg shadow-md transition-all duration-300">
+                                <div className="p-4">
+                                    <Line data={data} options={options} />
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
-                
+                </div>
             </div>
         </div>
     );
